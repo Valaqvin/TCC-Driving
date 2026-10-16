@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+venv/
+external_paths/
+
+# Generated outputs
+Result/
+ckpt/
+birdview_v2_cache/
+*.log
+*.out
+*.err
+*.tmp
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.engine
+
+# CARLA and simulation artifacts
+carla/
+simulation/carla/
+simulation/leaderboard/data/
+*.mp4
+*.avi
+*.bag
+*.db
+
+# Build artifacts
+build/
+dist/
+*.egg
+*.so
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

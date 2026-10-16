@@ -1,0 +1,70 @@
+﻿# =====================================================================
+# Agent Config: pnp_config_codriving_5_10_bargaining.yaml
+#
+# Extends the base PnP CoDriving config with the Rubinstein bargaining
+# inference module. Use this config file with the PnP_Agent.
+#
+# Key change from pnp_config_codriving_5_10.yaml:
+#   - action_name changed to the bargaining-integrated variant
+#   - Added "bargaining" section
+# =====================================================================
+
+control:
+    turn_KP: 1.0
+    turn_KI: 0.2
+    turn_KD: 0.1
+    turn_n: 5
+
+    speed_KP: 5.0
+    speed_KI: 1
+    speed_KD: 0.1
+    speed_n: 20
+
+    max_throttle: 0.75
+    brake_speed: 0.1
+    brake_ratio: 1.1
+    clip_delta: 0.35
+    max_speed: 5
+    collision_buffer: [2.5, 1.2]
+    momentum: 0
+    target_point_distance: 10
+    detect_threshold: &det_thre  0.04
+
+RSU:
+    change_rsu_frame: 5
+    rsu_height: 7.5
+    rsu_lane_side: 'right'
+    rsu_distance: 12
+
+simulation:
+    ego_num: 2                     # 2 vehicles for bargaining
+    skip_frames: 4
+
+perception:
+    core_method: 'collaborative_perception'
+    detect_threshold: *det_thre
+    detection_range: [36, 12, 12, 12]
+    perception_model_dir: 'ckpt/codriving/perception'
+
+planning:
+    core_method: 'MotionNet'
+    planner_config: "codriving/hypes_yaml/codriving/end2end_covlm_cmd_extend_adaptive_20.yaml"
+    planner_model_checkpoint: 'ckpt/codriving/planning/epoch_26.ckpt'
+
+# ================ USE BARGAINING INFERENCE MODULE ================
+action_name: 'team_code.pnp_infer_action_e2e_bargaining'
+
+# ================ RUBINSTEIN BARGAINING CONFIG ================
+bargaining:
+    enabled: true
+    debug: true
+    checkpoint: 'Result/ppo_train_20260608_061820/checkpoints/best_policy.pth'
+    # print bargaining diagnostics every frame
+    state_dim: 64
+    offer_dim: 4
+    hidden_dim: 128
+    max_rounds: 1
+    discount_alpha: 0.3
+    delta_min: 0.05
+    delta_max: 0.99
+    waypoint_offset_scale: 2.0
